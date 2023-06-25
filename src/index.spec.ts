@@ -3,22 +3,23 @@ import { ProposalsType } from "./types";
 import {
     testInput,
     testInputSorted,
+    testExpectedOutput,
 } from './data';
 import {
     extractDurationFromProposal,
     sortProposals,
 } from './utils';
 
-describe("Cover by tests utility function", () => {
+describe("Utility functions", () => {
     it("duration from the proposal extraction: mins", () => {
         const testDurationMinStr = 'Ruby Errors from Mismatched Gem Versions 45min';
         const testDurationMin = extractDurationFromProposal(testDurationMinStr);
-        expect(testDurationMin).toEqual(45);
+        expect(testDurationMin).toBe(45);
     });
     it("duration from the proposal extraction: nickname", () => {
         const testDurationNickStr = 'Rails for Python Developers lightning';
         const testDurationNick = extractDurationFromProposal(testDurationNickStr);
-        expect(testDurationNick).toEqual(5);
+        expect(testDurationNick).toBe(5);
     });
     it("proposals sorting by minutes , ascending", () => {
         const testSortedProposals = sortProposals(testInput);
@@ -26,10 +27,14 @@ describe("Cover by tests utility function", () => {
     });
 });
 
-describe("Spreading algo test coverage", () => {
+describe("Spreading algo", () => {
     it("we should return empty object if there is no given proposals", () => {
         const testInput: ProposalsType = [];
         const confSessions = spreadProposals(testInput);
         expect(confSessions).toEqual({});
+    });
+    it("we should return correct sessions tracks", () => {
+        const confSessions = spreadProposals(testInput);
+        expect(confSessions).toEqual(testExpectedOutput);
     });
 });
