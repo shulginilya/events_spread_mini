@@ -1,3 +1,9 @@
+import { extractDurationFromProposal } from "./utils";
+import { SpreadSessionsReturnType } from "./types";
+
+/*
+    We define a test input
+*/
 const testInput = [
     'Writing Fast Tests Against Enterprise Rails 60min',
     'Overdoing it in Python 45min',
@@ -20,16 +26,39 @@ const testInput = [
     'User Interface CSS in Rails Apps 30min',
 ];
 
-const spreadSessions = (sessions: string[]): string[] => {
-    const spreadedSessions: string[] = [];
+/*
+    Spread proposals across sessions function implementation
+*/
+const spreadProposals = (proposals: string[]): SpreadSessionsReturnType => {
     /*
-        Transform sessions into suitable data structure
-        key value pair object
-        where is the 'key' would be amount of minutes and 'value' the title of the event
-        should be sorted by desc according to the minutes 
+        Sort given array of strings by the minutes, ascending order
     */
+    const proposalsSorted = proposals.sort((a, b) => {
+        const numA = extractDurationFromProposal(a);
+        const numB = extractDurationFromProposal(b);
+        if (numA && numB) {
+            return numA - numB;
+        }
+        return 0;
+    });
+    /*
+        We are trying to fit the list of the proposals into 'track1'.
+        If we didn't fit all of them into 'track1' we are trying to fit the ramining into 'track2 ... trackN'
+        We loop over the sorted proposals backwards because we are gonna mutate array
+    */
+    for (let i = proposalsSorted.length - 1; i >=0; i--) {
+        const currentProposal = proposalsSorted[i];
+        console.log(currentProposal);
+    }
     /*
         After that implement spreading algo
     */
-    return spreadedSessions;
+    return {
+        track1: []
+    };
 };
+
+/*
+    Spread proposals function invocation
+*/
+spreadProposals(testInput);
