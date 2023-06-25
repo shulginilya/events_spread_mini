@@ -1,5 +1,30 @@
 import { spreadProposals } from './index';
 import { ProposalsType } from "./types";
+import {
+    testInput,
+    testInputSorted,
+} from './data';
+import {
+    extractDurationFromProposal,
+    sortProposals,
+} from './utils';
+
+describe("Cover by tests utility function", () => {
+    it("duration from the proposal extraction: mins", () => {
+        const testDurationMinStr = 'Ruby Errors from Mismatched Gem Versions 45min';
+        const testDurationMin = extractDurationFromProposal(testDurationMinStr);
+        expect(testDurationMin).toEqual(45);
+    });
+    it("duration from the proposal extraction: nickname", () => {
+        const testDurationNickStr = 'Rails for Python Developers lightning';
+        const testDurationNick = extractDurationFromProposal(testDurationNickStr);
+        expect(testDurationNick).toEqual(5);
+    });
+    it("proposals sorting by minutes , ascending", () => {
+        const testSortedProposals = sortProposals(testInput);
+        expect(testSortedProposals).toEqual(testInputSorted);
+    });
+});
 
 describe("Spreading algo test coverage", () => {
     it("we should return empty object if there is no given proposals", () => {
