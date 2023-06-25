@@ -1,5 +1,8 @@
 import { extractDurationFromProposal } from "./utils";
-import { SpreadSessionsReturnType } from "./types";
+import {
+    SpreadSessionsReturnType,
+    ProposalsType
+} from "./types";
 
 /*
     We define a test input
@@ -29,7 +32,7 @@ const testInput = [
 /*
     Spread proposals across sessions function implementation
 */
-const spreadProposals = (proposals: string[]): SpreadSessionsReturnType => {
+export const spreadProposals = (proposals: ProposalsType): SpreadSessionsReturnType => {
     /*
         Sort given array of strings by the minutes, ascending order
     */
@@ -46,16 +49,14 @@ const spreadProposals = (proposals: string[]): SpreadSessionsReturnType => {
         If we didn't fit all of them into 'track1' we are trying to fit the ramining into 'track2 ... trackN'
         We loop over the sorted proposals backwards because we are gonna mutate array
     */
-    for (let i = proposalsSorted.length - 1; i >=0; i--) {
+    for (let i = proposalsSorted.length - 1; i >= 0; i--) {
         const currentProposal = proposalsSorted[i];
         console.log(currentProposal);
     }
     /*
         After that implement spreading algo
     */
-    return {
-        track1: []
-    };
+    return {};
 };
 
 /*
