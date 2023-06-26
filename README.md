@@ -3,4 +3,4 @@
 1) to run app use this npm command: "npm start"
 2) to run tests use this npm command: "npm run test:unit"
 
-4pm >= networking_session <= 5pm
+Node version which were used : 18.16.0

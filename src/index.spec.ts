@@ -33,9 +33,8 @@ describe("Spreading algo", () => {
         const confSessions = spreadProposals(1, testInput);
         expect(confSessions).toEqual({});
     });
-    it("we should return correct sessions tracks", () => {
+    it("we should return correct sessions tracks: test case 1", () => {
         const confSessions = spreadProposals(1, testInput);
-        expect(confSessions.track1.length).toBe(9);
-        expect(confSessions.track2.length).toBe(11);
+        expect(confSessions).toEqual(testExpectedOutput);
     });
 });
