@@ -1,7 +1,11 @@
 /*
     Import utility functions, test input and types
 */
-import { sortProposals } from "./utils";
+import {
+    sortProposals,
+    extractDurationFromProposal,
+} from "./utils";
+import { defineTimeByGivenHours } from './dates_util';
 import { testInput } from "./data";
 import {
     SpreadSessionsReturnType,
@@ -11,27 +15,70 @@ import {
 /*
     Spread proposals across sessions function implementation
 */
-export const spreadProposals = (proposals: ProposalsType): SpreadSessionsReturnType => {
+export const spreadProposals = (currentTrack: number, proposalsParam: ProposalsType, previousSessionTracksParam: SpreadSessionsReturnType = {}): SpreadSessionsReturnType => {
+    if (proposalsParam.length === 0) {
+        return {};
+    }
+    const proposals = JSON.parse(JSON.stringify(proposalsParam));
+    let currentLocalTrack = currentTrack;
     /*
-        Sort given array of strings by the minutes, ascending order
+        Merge with a previous track , if needed , and define
+    */
+    let sessionTracks: SpreadSessionsReturnType = {
+        [`track${currentTrack}`]: []
+    };
+    const previousSessionTracks = JSON.parse(JSON.stringify(previousSessionTracksParam));
+    if (Object.keys(previousSessionTracks).length > 0) {
+        sessionTracks = Object.assign({}, previousSessionTracks, sessionTracks);
+    }
+    /*
+        Constants
+    */
+    const CONF_START_TIME = defineTimeByGivenHours(9);
+    const CONF_START_LUNCH_TIME = defineTimeByGivenHours(12);
+    const CONF_END_LUNCH_TIME = defineTimeByGivenHours(13);
+    const CONF_END_TIME = defineTimeByGivenHours(17);
+    /*
+        Sort given array of proposals by the duration, ascending order
     */
     const proposalsSorted = sortProposals(proposals);
     /*
-        We are trying to fit the list of the proposals into 'track1'.
-        If we didn't fit all of them into 'track1' we are trying to fit the ramining into 'track2 ... trackN'
-        We loop over the sorted proposals backwards because we are gonna mutate array
+        Loop over the proposals and implement the actual spreading
+        We are looping from the back to start
+        So will have no issues when we will be mutation proposalsSorted
     */
+    let currentTime = defineTimeByGivenHours(9);
     for (let i = proposalsSorted.length - 1; i >= 0; i--) {
         const currentProposal = proposalsSorted[i];
-        console.log(currentProposal);
+        const proposalDuration = extractDurationFromProposal(currentProposal);
+        console.log(currentProposal, proposalDuration);
+        if ((currentTime.isSame(CONF_END_TIME) || currentTime.isAfter(CONF_END_TIME)) && proposalsSorted.length > 0) {
+            // track is filled up , so we need to switch to the new track if there is any proposals left
+            // the day is over so we switch to the next day , recursion
+            currentLocalTrack++;
+            return spreadProposals(currentLocalTrack, proposalsSorted, sessionTracks);
+        } else {
+            if (currentTime.isSame(CONF_START_LUNCH_TIME)) {
+                // handle the lunch time case
+                sessionTracks[`track${currentTrack}`].push(`${CONF_START_LUNCH_TIME.format('LT')} Lunch`);
+                currentTime.add(1, 'hour');
+            }
+            // add proposal to the track and inlarge the time
+            sessionTracks[`track${currentTrack}`].push(`${currentTime.format('LT')} ${currentProposal}`);
+            currentTime.add(proposalDuration, 'minutes');
+            // if add a proposal we remove it from the list
+            proposalsSorted.splice(i, 1);
+        }
     }
     /*
-        After that implement spreading algo
+        Return tracks
     */
-    return {};
+    console.log('==========================');
+    console.log(sessionTracks);
+    return sessionTracks;
 };
 
 /*
     Spread proposals function invocation
 */
-spreadProposals(testInput);
+spreadProposals(1, testInput);
