@@ -42,6 +42,7 @@ export const spreadProposals = (currentTrack: number, proposalsParam: ProposalsT
         Optional
     */
     const proposalsSorted = sortProposals(proposals);
+    // const proposalsSorted = proposals;
     /*
         Loop over the proposals and implement the actual spreading
         We are looping from the back to start
@@ -83,14 +84,14 @@ export const spreadProposals = (currentTrack: number, proposalsParam: ProposalsT
                         break;
                     }
                 }
-                sessionTracks[`track${currentTrack}`].push(`${prevTime.format('LT')} ${currentProposal}`);
+                // sessionTracks[`track${currentTrack}`].push(`${prevTime.format('LT')} ${currentProposal}`);
                 if (candidateReplaceProposalIndex > -1) {
                     const rTime = prevTime.add(candidateDuration, 'minutes');
                     const candidateReplaceProposal = proposalsSorted[candidateReplaceProposalIndex];
                     sessionTracks[`track${currentTrack}`].push(`${rTime.format('LT')} ${candidateReplaceProposal}`);
                     proposalsSorted.splice(candidateReplaceProposalIndex, 1);
                 }
-                proposalsSorted.splice(i, 1);
+                // proposalsSorted.splice(i, 1);
             } else {
                 sessionTracks[`track${currentTrack}`].push(`${prevTime.format('LT')} ${currentProposal}`);
                 proposalsSorted.splice(i, 1);
@@ -100,6 +101,7 @@ export const spreadProposals = (currentTrack: number, proposalsParam: ProposalsT
     /*
         Return tracks
     */
+    console.log(sessionTracks);
     return sessionTracks;
 };
 

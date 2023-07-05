@@ -37,4 +37,13 @@ describe("Spreading algo", () => {
         const confSessions = spreadProposals(1, testInput);
         expect(confSessions).toEqual(testExpectedOutput);
     });
+    // it("all sessions should be fit into the tracks", () => {
+    //     const confSessions = spreadProposals(1, testInput);
+    //     let sessionsCountInTracks = 0;
+    //     for (let track in confSessions) {
+    //         sessionsCountInTracks =+ confSessions[track].length;
+    //     }
+    //     console.log('sessionsCountInTracks: ', sessionsCountInTracks);
+    //     expect(sessionsCountInTracks).toBe(testInputSorted.length);
+    // });
 });
