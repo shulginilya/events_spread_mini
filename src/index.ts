@@ -83,14 +83,12 @@ export const spreadProposals = (currentTrack: number, proposalsParam: ProposalsT
                         break;
                     }
                 }
-                sessionTracks[`track${currentTrack}`].push(`${prevTime.format('LT')} ${currentProposal}`);
                 if (candidateReplaceProposalIndex > -1) {
                     const rTime = prevTime.add(candidateDuration, 'minutes');
                     const candidateReplaceProposal = proposalsSorted[candidateReplaceProposalIndex];
                     sessionTracks[`track${currentTrack}`].push(`${rTime.format('LT')} ${candidateReplaceProposal}`);
                     proposalsSorted.splice(candidateReplaceProposalIndex, 1);
                 }
-                proposalsSorted.splice(i, 1);
             } else {
                 sessionTracks[`track${currentTrack}`].push(`${prevTime.format('LT')} ${currentProposal}`);
                 proposalsSorted.splice(i, 1);
